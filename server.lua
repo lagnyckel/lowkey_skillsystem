@@ -19,25 +19,7 @@ function Skillsystem:Init()
             ['@identifier'] = player.identifier
         })
 
-        if results then 
-            local skills = results[1];
-
-            if not skills then return end;
-
-            local skillsTable = {};
-
-            for k,v in pairs(skills) do 
-                local skill = Config.Skills[k];
-
-                if not skill then return end;
-
-                skill.procent = v;
-
-                skillsTable[k] = skill;
-            end
-
-            callback({ success = true, skills = skillsTable })
-        end
+        callback({ success = true, skills = results[1] })
     end)
 
     ESX.RegisterServerCallback('lowkey_skillsystem:updateSkill', function(source, callback, data)
@@ -48,11 +30,10 @@ function Skillsystem:Init()
         local procent = data.procent; 
         local skill = data.skill;
 
-        local newValue = self:CalculateNewValue(skill, procent);
-
+        local newValue = self:CalculateNewValue(skill, procent, data.playerSkills);
         local results = self:UpdateSkill(player, skill, newValue); 
 
-        callback(results)
+        callback({ success = results.success, skill = newValue })
     end)
 end
 
@@ -75,13 +56,10 @@ function Skillsystem:InsertSkill(player, skill, newValue)
     return { success = true, skills = Config.Skills }
 end
 
-function Skillsystem:CalculateNewValue(skill, procent)
-    local _skill = Config.Skills[skill];
-
-    if not _skill then return end; 
+function Skillsystem:CalculateNewValue(skill, procent, playerSkills)
 
     local newValue;
-    local currentProcent = _skill.procent or 0;  
+    local currentProcent = playerSkills.procent or 0;  
     
     if procent >= 100 then 
         newValue = 100; 
@@ -95,6 +73,8 @@ function Skillsystem:CalculateNewValue(skill, procent)
 end
 
 function Skillsystem:UpdateSkill(player, skill, newValue)
+    print('Skill, procent ', skill, newValue)
+
     local sqlQuery = ('UPDATE users SET %s = @procent WHERE identifier = @identifier'):format(skill); 
 
     local rowsChanged = MySQL.Sync.execute(sqlQuery, {

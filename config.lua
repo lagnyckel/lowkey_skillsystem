@@ -2,7 +2,7 @@ Config = {};
 
 Config.Skills = {
     ['stamina'] = {
-        procent = 20, -- Default procent
+        procent = 0, -- Default procent
         stat = 'MP0_STAMINA',
         title = 'PSF_STAMINA', 
     }, 

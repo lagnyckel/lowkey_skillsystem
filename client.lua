@@ -15,17 +15,15 @@ function Skillsystem:update(skill, procent, functions)
 
     local results = self:TriggerCallback({
         eventName = 'lowkey_skillsystem:updateSkill', 
-        args = { procent = procent, skill = skill }
+        args = { procent = procent, skill = skill, playerSkills = Config.Skills[skill] }
     })
 
     if not results.success then 
         return print('failed to update skill')
     end
 
-    print(json.encode(Config.Skills[skill]))
-
-    self:sendMessage(skill, Config.Skills[skill].procent, lastProcent); 
-    PresenceEventUpdatestatInt(stat, Config.Skills[skill].procent, true)
+    self:sendMessage(skill, results.skill, lastProcent); 
+    PresenceEventUpdatestatInt(stat, results.skill, true)
 
     if functions.onUpdated then 
         functions.onUpdated(skill, procent)
@@ -52,7 +50,7 @@ function Skillsystem:sendMessage(skill, procent, lastProcent)
 
     local title = skillData.title or 'PSF_STAMINA'
     local p1 = 14
-    local lastProgress = lastProcent
+    local lastProgress = lastProgress
     local newProgress = procent
     local unknownBool = false
 
@@ -66,7 +64,6 @@ function Skillsystem:sendMessage(skill, procent, lastProcent)
     EndTextCommandThefeedPostTicker(blink, showInBrief)
     UnregisterPedheadshot(handle)
 end
-
 
 function Skillsystem:TriggerCallback(data)
     local p = promise:new();
@@ -84,10 +81,6 @@ RegisterCommand('skill', function()
             print('Du har uppdaterat din stamina till', procent, 'procent')
         end
     })
-end)
-
-RegisterCommand('randomcommand', function()
-    Skillsystem:sendMessage('MP0_STAMINA', 10, 40)
 end)
 
 Citizen.CreateThread(function()
@@ -114,5 +107,11 @@ Citizen.CreateThread(function()
         end
 
         StatSetInt(stat, skill.procent, true);
+    end
+
+    for name, skill in pairs(skills.skills) do 
+        Config.Skills[name].procent = skill
+        
+        StatSetInt(Config.Skills[name].stat, Config.Skills[name].procent, true);
     end
 end)
