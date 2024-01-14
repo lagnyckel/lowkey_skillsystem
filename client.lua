@@ -78,7 +78,7 @@ end
 RegisterCommand('skill', function()
     Skillsystem:update('stamina', 10, {
         onUpdated = function(skill, procent)
-            print('Du har uppdaterat din stamina till', procent, 'procent')
+            -- Fortsätt här
         end
     })
 end)
