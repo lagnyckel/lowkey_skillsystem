@@ -7,3 +7,4 @@ exports.lowkey_skillsystem:update('stamina', 10, {
         -- Run your code here 
     end
 })
+
