@@ -57,7 +57,6 @@ function Skillsystem:InsertSkill(player, skill, newValue)
 end
 
 function Skillsystem:CalculateNewValue(skill, procent, playerSkills)
-
     local newValue;
     local currentProcent = playerSkills.procent or 0;  
     

@@ -1,6 +1,6 @@
 ## lowkey_skillsystem - Gta skillsystem
 
-[ Export ] 
+[Export] 
 
 exports.lowkey_skillsystem:update('stamina', 10, {
     onUpdated = function(skill, procent)
