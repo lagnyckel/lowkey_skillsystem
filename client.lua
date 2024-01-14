@@ -75,14 +75,6 @@ function Skillsystem:TriggerCallback(data)
     return Citizen.Await(p)
 end 
 
-RegisterCommand('skill', function()
-    Skillsystem:update('stamina', 10, {
-        onUpdated = function(skill, procent)
-            -- Fortsätt här
-        end
-    })
-end)
-
 Citizen.CreateThread(function()
     while not ESX.IsPlayerLoaded() do 
         Citizen.Wait(100)
@@ -114,4 +106,8 @@ Citizen.CreateThread(function()
         
         StatSetInt(Config.Skills[name].stat, Config.Skills[name].procent, true);
     end
+end)
+
+exports('update', function(skill, procent, functions)
+    Skillsystem:update(skill, procent, functions)
 end)
