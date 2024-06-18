@@ -1,10 +1,12 @@
-## lowkey_skillsystem - Gta skillsystem
+# lowkey_skillsystem - Gta skillsystem
 
-[Export] 
+## Export 
 
+```lua
 exports.lowkey_skillsystem:update('stamina', 10, {
     onUpdated = function(skill, procent)
         -- Run your code here 
     end
 })
 
+```
